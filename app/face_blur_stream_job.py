@@ -1,9 +1,9 @@
-from face_detector import FaceDetector
+from app.face_detector import FaceDetector
 import pandas as pd
 from pyspark.sql.pandas.functions import pandas_udf, PandasUDFType
 from pyspark.sql.types import BinaryType
 
-from utils import encode_obj, decode_obj
+from app.utils import encode_obj, decode_obj
 from pyspark.sql import SparkSession
 
 BOOTSTRAP_SERVERS = 'localhost:9092,localhost:9093,localhost:9094'

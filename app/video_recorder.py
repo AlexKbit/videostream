@@ -1,4 +1,4 @@
-from utils import encode_obj
+from app.utils import encode_obj
 import uuid
 import cv2
 from kafka import KafkaProducer
