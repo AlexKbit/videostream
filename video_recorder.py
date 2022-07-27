@@ -3,7 +3,7 @@ import uuid
 import cv2
 from kafka import KafkaProducer
 
-BOOTSTRAP_SERVERS = 'localhost:9092,localhost:9093,localhost:9094'
+BOOTSTRAP_SERVERS = 'localhost:9092'
 VIDEO_TOPIC = 'videostream_in'
 CAMERA_ID = str(uuid.uuid4())
 
@@ -12,7 +12,9 @@ camera.set(cv2.CAP_PROP_FRAME_WIDTH, 350)
 camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 350)
 producer = KafkaProducer(bootstrap_servers=BOOTSTRAP_SERVERS,
                          key_serializer=str.encode,
-                         max_request_size=2682303)
+                         max_request_size=1246000,
+                         compression_type='lz4',
+                         acks=1)
 
 while True:
     success, img = camera.read()

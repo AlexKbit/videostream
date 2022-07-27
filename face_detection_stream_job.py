@@ -15,7 +15,7 @@ VIDEO_OUT_TOPIC = 'videostream_out'
 def face_detect(frames: pd.Series) -> pd.Series:
     detector = FaceDetector()
     frames = frames.map(decode_obj)
-    res = frames.map(lambda x: encode_obj(detector.find_faces(x)[0]))
+    res = frames.map(lambda x: encode_obj(detector.blur_face(x)[0]))
     return res
 
 
