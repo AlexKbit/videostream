@@ -15,7 +15,7 @@ VIDEO_OUT_TOPIC = 'videostream_out'
 def face_detect(frames: pd.Series) -> pd.Series:
     detector = FaceDetector()
     frames = frames.map(decode_obj)
-    res = frames.map(lambda x: encode_obj(detector.findFaces(x)[0]))
+    res = frames.map(lambda x: encode_obj(detector.find_faces(x)[0]))
     return res
 
 
@@ -34,7 +34,7 @@ def main():
         .option("subscribe", VIDEO_IN_TOPIC) \
         .load()
 
-    df = frames.selectExpr("value")
+    df = frames.selectExpr("key", "value")
     df = df.withColumn('frames_out', face_detect('value')) \
         .drop('value') \
         .withColumnRenamed('frames_out', 'value')

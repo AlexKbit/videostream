@@ -10,10 +10,12 @@ CAMERA_ID = str(uuid.uuid4())
 camera = cv2.VideoCapture(0)
 camera.set(cv2.CAP_PROP_FRAME_WIDTH, 350)
 camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 350)
-producer = KafkaProducer(bootstrap_servers=BOOTSTRAP_SERVERS, max_request_size=2682303)
+producer = KafkaProducer(bootstrap_servers=BOOTSTRAP_SERVERS,
+                         key_serializer=str.encode,
+                         max_request_size=2682303)
 
 while True:
     success, img = camera.read()
     cv2.imshow("VideoRecorder", img)
-    producer.send(VIDEO_TOPIC, encode_obj(img)).add_errback(lambda e: print(f"Error {e}"))
+    producer.send(VIDEO_TOPIC, value=encode_obj(img), key=CAMERA_ID).add_errback(lambda e: print(f"Error {e}"))
     cv2.waitKey(1)
