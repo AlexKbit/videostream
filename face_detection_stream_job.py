@@ -1,18 +1,21 @@
-from cvzone.FaceDetectionModule import FaceDetector
+from face_detector import FaceDetector
 import pandas as pd
+from pyspark.sql.pandas.functions import pandas_udf, PandasUDFType
+from pyspark.sql.types import BinaryType
+
 from utils import encode_obj, decode_obj
 from pyspark.sql import SparkSession
-import pyspark.sql.functions as F
 
 BOOTSTRAP_SERVERS = 'localhost:9092,localhost:9093,localhost:9094'
 VIDEO_IN_TOPIC = 'videostream_in'
 VIDEO_OUT_TOPIC = 'videostream_out'
 
 
+@pandas_udf(returnType=BinaryType(), functionType=PandasUDFType.SCALAR)
 def face_detect(frames: pd.Series) -> pd.Series:
     detector = FaceDetector()
     frames = frames.map(decode_obj)
-    res = frames.map(lambda x: encode_obj(detector.findFaces(x)(0)))
+    res = frames.map(lambda x: encode_obj(detector.findFaces(x)[0]))
     return res
 
 
@@ -32,15 +35,15 @@ def main():
         .load()
 
     df = frames.selectExpr("value")
-    face_detect_udf = F.udf(face_detect)
-    df = df.withColumn('frames_out', face_detect_udf(F.col('value'))) \
+    df = df.withColumn('frames_out', face_detect('value')) \
         .drop('value') \
         .withColumnRenamed('frames_out', 'value')
     query = df.writeStream \
         .format("kafka") \
         .outputMode("append") \
-        .option("checkpointLocation", "/tmp/vaquarkhan/checkpoint") \
+        .option("checkpointLocation", "checkpoint") \
         .option("kafka.bootstrap.servers", "localhost:9092,localhost:9093,localhost:9094") \
+        .option("kafka.max.request.size", "2682303") \
         .option("topic", VIDEO_OUT_TOPIC) \
         .start()
 

@@ -1,6 +1,3 @@
-import json
-import codecs
-import pickle
 import cv2
 from kafka import KafkaConsumer
 from utils import decode_obj
