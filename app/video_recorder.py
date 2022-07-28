@@ -1,13 +1,15 @@
-from app.utils import encode_obj
+from utils import encode_obj
 import uuid
 import cv2
 from kafka import KafkaProducer
 
-BOOTSTRAP_SERVERS = 'localhost:9092'
+BOOTSTRAP_SERVERS = 'localhost:9092,localhost:9093,localhost:9094'
 VIDEO_TOPIC = 'videostream_in'
+VIDEO_DEVICE = 0  # may specific for env
 CAMERA_ID = str(uuid.uuid4())
+print(f'Camera ID: {CAMERA_ID}')
 
-camera = cv2.VideoCapture(0)
+camera = cv2.VideoCapture(VIDEO_DEVICE)
 camera.set(cv2.CAP_PROP_FRAME_WIDTH, 350)
 camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 350)
 producer = KafkaProducer(bootstrap_servers=BOOTSTRAP_SERVERS,

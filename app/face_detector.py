@@ -73,11 +73,9 @@ class FaceDetector:
                 if draw:
                     x, y = bbox[0], bbox[1]
                     w, h = bbox[2], bbox[3]
-
                     # Grab ROI with Numpy slicing and blur
                     ROI = img[y:y + h, x:x + w]
                     blur = cv2.GaussianBlur(ROI, (61, 61), 0)
-
                     # Insert ROI back into image
                     img[y:y + h, x:x + w] = blur
 
@@ -90,7 +88,6 @@ def main():
     while True:
         success, img = cap.read()
         img, _ = detector.find_faces(img)
-
         cv2.imshow("Image", img)
         cv2.waitKey(1)
 
