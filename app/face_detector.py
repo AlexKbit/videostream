@@ -4,16 +4,15 @@ import mediapipe as mp
 
 class FaceDetector:
     """
-    Find faces in realtime using the light weight model provided in the mediapipe
-    library.
+    Find faces in realtime using the light weight model provided in the mediapipe library.
     """
 
-    def __init__(self, minDetectionCon=0.5):
+    def __init__(self, min_detection_con=0.5):
         """
         :param minDetectionCon: Minimum Detection Confidence Threshold
         """
 
-        self.minDetectionCon = minDetectionCon
+        self.minDetectionCon = min_detection_con
         self.mpFaceDetection = mp.solutions.face_detection
         self.mpDraw = mp.solutions.drawing_utils
         self.faceDetection = self.mpFaceDetection.FaceDetection(self.minDetectionCon)
@@ -84,6 +83,8 @@ class FaceDetector:
 
 def main():
     cap = cv2.VideoCapture(0)
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 200)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 200)
     detector = FaceDetector()
     while True:
         success, img = cap.read()

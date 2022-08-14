@@ -10,8 +10,8 @@ CAMERA_ID = str(uuid.uuid4())
 print(f'Camera ID: {CAMERA_ID}')
 
 camera = cv2.VideoCapture(VIDEO_DEVICE)
-camera.set(cv2.CAP_PROP_FRAME_WIDTH, 350)
-camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 350)
+camera.set(cv2.CAP_PROP_FRAME_WIDTH, 200)
+camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 200)
 producer = KafkaProducer(bootstrap_servers=BOOTSTRAP_SERVERS,
                          key_serializer=str.encode,
                          max_request_size=1246000,
