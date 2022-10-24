@@ -1,4 +1,5 @@
 # Anonymize faces in video stream
+[YouTobe (RU)](https://youtu.be/WpgRkRELP5I)
 
 ## System Design
 <img src="assets/design.png" width="734" height="550px"/>
